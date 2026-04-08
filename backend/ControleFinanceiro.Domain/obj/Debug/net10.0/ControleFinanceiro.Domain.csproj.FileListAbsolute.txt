@@ -9,3 +9,4 @@ C:\Users\abner.trindade\Downloads\Trabalho Desen.Sistemas\Trabalho Desen.Sistema
 C:\Users\abner.trindade\Downloads\Trabalho Desen.Sistemas\Trabalho Desen.Sistemas\finance-app\backend\ControleFinanceiro.Domain\obj\Debug\net10.0\refint\ControleFinanceiro.Domain.dll
 C:\Users\abner.trindade\Downloads\Trabalho Desen.Sistemas\Trabalho Desen.Sistemas\finance-app\backend\ControleFinanceiro.Domain\obj\Debug\net10.0\ControleFinanceiro.Domain.pdb
 C:\Users\abner.trindade\Downloads\Trabalho Desen.Sistemas\Trabalho Desen.Sistemas\finance-app\backend\ControleFinanceiro.Domain\obj\Debug\net10.0\ref\ControleFinanceiro.Domain.dll
+C:\Users\abner.trindade\Downloads\Trabalho Desen.Sistemas\Trabalho Desen.Sistemas\finance-app\backend\ControleFinanceiro.Domain\obj\Debug\net10.0\ControleFinanceiro.Domain.sourcelink.json
