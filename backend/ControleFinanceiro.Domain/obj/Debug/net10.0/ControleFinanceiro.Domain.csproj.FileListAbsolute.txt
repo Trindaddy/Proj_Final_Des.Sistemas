@@ -1,0 +1,11 @@
+C:\Users\abner.trindade\Downloads\Trabalho Desen.Sistemas\Trabalho Desen.Sistemas\finance-app\backend\ControleFinanceiro.Domain\bin\Debug\net10.0\ControleFinanceiro.Domain.deps.json
+C:\Users\abner.trindade\Downloads\Trabalho Desen.Sistemas\Trabalho Desen.Sistemas\finance-app\backend\ControleFinanceiro.Domain\bin\Debug\net10.0\ControleFinanceiro.Domain.dll
+C:\Users\abner.trindade\Downloads\Trabalho Desen.Sistemas\Trabalho Desen.Sistemas\finance-app\backend\ControleFinanceiro.Domain\bin\Debug\net10.0\ControleFinanceiro.Domain.pdb
+C:\Users\abner.trindade\Downloads\Trabalho Desen.Sistemas\Trabalho Desen.Sistemas\finance-app\backend\ControleFinanceiro.Domain\obj\Debug\net10.0\ControleFinanceiro.Domain.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\abner.trindade\Downloads\Trabalho Desen.Sistemas\Trabalho Desen.Sistemas\finance-app\backend\ControleFinanceiro.Domain\obj\Debug\net10.0\ControleFinanceiro.Domain.AssemblyInfoInputs.cache
+C:\Users\abner.trindade\Downloads\Trabalho Desen.Sistemas\Trabalho Desen.Sistemas\finance-app\backend\ControleFinanceiro.Domain\obj\Debug\net10.0\ControleFinanceiro.Domain.AssemblyInfo.cs
+C:\Users\abner.trindade\Downloads\Trabalho Desen.Sistemas\Trabalho Desen.Sistemas\finance-app\backend\ControleFinanceiro.Domain\obj\Debug\net10.0\ControleFinanceiro.Domain.csproj.CoreCompileInputs.cache
+C:\Users\abner.trindade\Downloads\Trabalho Desen.Sistemas\Trabalho Desen.Sistemas\finance-app\backend\ControleFinanceiro.Domain\obj\Debug\net10.0\ControleFinanceiro.Domain.dll
+C:\Users\abner.trindade\Downloads\Trabalho Desen.Sistemas\Trabalho Desen.Sistemas\finance-app\backend\ControleFinanceiro.Domain\obj\Debug\net10.0\refint\ControleFinanceiro.Domain.dll
+C:\Users\abner.trindade\Downloads\Trabalho Desen.Sistemas\Trabalho Desen.Sistemas\finance-app\backend\ControleFinanceiro.Domain\obj\Debug\net10.0\ControleFinanceiro.Domain.pdb
+C:\Users\abner.trindade\Downloads\Trabalho Desen.Sistemas\Trabalho Desen.Sistemas\finance-app\backend\ControleFinanceiro.Domain\obj\Debug\net10.0\ref\ControleFinanceiro.Domain.dll
