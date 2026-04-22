@@ -1,0 +1,15 @@
+version: '3.8'
+services:
+  api:
+    build: .
+    ports:
+      - "5000:5000"
+    volumes:
+      # Espelha o seu código para dentro do container (atualiza em tempo real)
+      - .:/app
+      # Protege a pasta node_modules do Linux para não conflitar com a do Windows
+      - /app/node_modules
+    environment:
+      - DATABASE_URL=file:./dev.db
+      - JWT_SECRET=PassWord@123
+    command: sh -c "npx prisma migrate deploy && npm run dev"
