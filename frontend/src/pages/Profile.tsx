@@ -4,24 +4,27 @@ import { Camera, Mail, User as UserIcon, LogOut, CheckCircle2 } from 'lucide-rea
 
 export const Profile = () => {
   const { user, updateProfile, logout } = useAuth();
-  
+
   const [name, setName] = useState(user?.name || '');
   const [email, setEmail] = useState(user?.email || '');
   const [isSaving, setIsSaving] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
 
-  const handleSave = (e: React.FormEvent) => {
+  const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSaving(true);
-    
-    // Simulate API call
-    setTimeout(() => {
-      updateProfile({ name, email });
-      setIsSaving(false);
+
+    try {
+      // Chamada real para a API (que deve estar configurada no useAuth)
+      await updateProfile({ name, email });
       setShowSuccess(true);
-      
       setTimeout(() => setShowSuccess(false), 3000);
-    }, 800);
+    } catch (error) {
+      console.error("Erro ao atualizar o perfil", error);
+      // Aqui você pode colocar um setError() se quiser avisar o usuário
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   const handlePhotoChange = () => {
@@ -41,8 +44,8 @@ export const Profile = () => {
           <h1 className="text-3xl font-bold tracking-tight">Seu Perfil</h1>
           <p className="text-muted-foreground mt-1 text-sm md:text-base">Gerencie suas informações pessoais e credenciais</p>
         </div>
-        
-        <button 
+
+        <button
           onClick={logout}
           className="flex items-center gap-2 px-4 py-2.5 text-sm font-semibold text-red-600 bg-red-50 hover:bg-red-100 rounded-2xl transition-colors"
         >
@@ -57,11 +60,11 @@ export const Profile = () => {
         <div className="absolute top-0 left-0 w-full h-32 bg-gradient-to-br from-gray-50 to-emerald-50/50 opacity-50 pointer-events-none" />
 
         <div className="flex flex-col md:flex-row gap-12 relative z-10">
-          
+
           {/* Avatar Section */}
           <div className="flex flex-col items-center gap-5">
-            <div 
-              className="relative group cursor-pointer" 
+            <div
+              className="relative group cursor-pointer"
               onClick={handlePhotoChange}
               title="Mudar foto de perfil"
             >
@@ -78,7 +81,7 @@ export const Profile = () => {
                 <Camera className="w-5 h-5" />
               </div>
             </div>
-            
+
             <div className="text-center">
               <div className="text-xs font-semibold text-emerald-700 bg-emerald-50 px-4 py-1.5 rounded-full border border-emerald-100/50">
                 Membro desde {user.memberSince || 'esse mês'}
@@ -140,7 +143,7 @@ export const Profile = () => {
               </div>
             </form>
           </div>
-          
+
         </div>
       </div>
     </div>

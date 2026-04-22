@@ -1,7 +1,7 @@
 /* eslint-disable react-refresh/only-export-components */
-import { createContext, useContext, useEffect, useState, ReactNode, useCallback } from 'react';
+import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
 import { Transaction } from '../types';
-import { mockTransactions } from '../data/mockData';
+import api from '../services/api'; // <-- Conectando o Axios
 
 interface TransactionContextType {
   transactions: Transaction[];
@@ -14,55 +14,77 @@ interface TransactionContextType {
 const TransactionContext = createContext<TransactionContextType | undefined>(undefined);
 
 export const TransactionProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+  const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isMockData, setIsMockData] = useState(false);
-  
-  // Hydration via LocalStorage com Lazy Initialization (Premissa nº1)
-  const [transactions, setTransactions] = useState<Transaction[]>(() => {
-    try {
-      const storedData = localStorage.getItem('@finance-app:transactions');
-      if (storedData) {
-        return JSON.parse(storedData);
-      }
-      setIsMockData(true);
-      return mockTransactions; // Fallback se não existir no LocalStorage
-    } catch (error) {
-      console.error('Error hydrating from LocalStorage:', error);
-      setIsMockData(true);
-      return mockTransactions;
-    }
-  });
 
-  // Effect-based Sync (Premissa nº2)
+  // Busca as transações reais da API ao carregar o contexto
+  const fetchTransactions = async () => {
+    setIsLoading(true);
+    try {
+      const response = await api.get('/transactions');
+      
+      // Mapeamento: O backend retorna número (1 ou 0), o front precisa de 'income' ou 'expense'
+      const formattedTransactions = response.data.map((t: any) => ({
+        id: t.id,
+        description: t.description,
+        amount: t.amount,
+        date: t.date,
+        // Traduzindo do banco para a tela:
+        type: t.type === 1 ? 'income' : 'expense', 
+        // Se o backend usar relação com Categoria, pegamos o nome:
+        category: t.category?.name || 'Geral' 
+      }));
+
+      setTransactions(formattedTransactions);
+      setIsMockData(false);
+    } catch (error) {
+      console.error('Erro ao buscar transações da API:', error);
+      // Se falhar, você pode optar por deixar a lista vazia ou carregar mockData aqui
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Carrega as transações assim que o componente é montado
   useEffect(() => {
-    try {
-      localStorage.setItem('@finance-app:transactions', JSON.stringify(transactions));
-    } catch (error) {
-      console.error('Failed to sync to LocalStorage:', error);
-    }
-  }, [transactions]);
-
-  // Função utilitária para Delay / "Simulação de Latência" (Premissa nº3)
-  const simulateLatency = useCallback((ms = 300) => new Promise(resolve => setTimeout(resolve, ms)), []);
+    fetchTransactions();
+  }, []);
 
   const addTransaction = async (data: Omit<Transaction, 'id'>) => {
     setIsLoading(true);
-    await simulateLatency(400); // Sensação "Premium" não ser seco
+    try {
+      // Precisamos converter o texto 'income'/'expense' de volta para Número antes de enviar
+      const backendPayload = {
+        description: data.description,
+        amount: data.amount,
+        date: data.date,
+        type: data.type === 'income' ? 1 : 0,
+        categoryId: data.category // Atenção: o backend espera o ID da categoria, não o nome em texto!
+      };
 
-    const newTransaction: Transaction = {
-      ...data,
-      id: crypto.randomUUID(),
-    };
-
-    setTransactions((prev) => [...prev, newTransaction]);
-    setIsLoading(false);
+      await api.post('/transactions', backendPayload);
+      
+      // Recarrega a lista do banco para garantir que temos o ID real do SQLite
+      await fetchTransactions();
+    } catch (error) {
+      console.error('Erro ao salvar transação:', error);
+      throw error;
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const deleteTransaction = async (id: string) => {
     setIsLoading(true);
-    await simulateLatency(300);
-    setTransactions((prev) => prev.filter(t => t.id !== id));
-    setIsLoading(false);
+    try {
+      await api.delete(`/transactions/${id}`);
+      setTransactions((prev) => prev.filter(t => t.id !== id));
+    } catch (error) {
+      console.error('Erro ao deletar transação:', error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
