@@ -1,7 +1,7 @@
 /* eslint-disable react-refresh/only-export-components */
-import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
+import { createContext, useContext, useEffect, useState, ReactNode, useCallback } from 'react';
 import { Transaction } from '../types';
-import api from '../services/api'; // <-- Conectando o Axios
+import api from '../services/api';
 
 interface TransactionContextType {
   transactions: Transaction[];
@@ -18,21 +18,18 @@ export const TransactionProvider: React.FC<{ children: ReactNode }> = ({ childre
   const [isLoading, setIsLoading] = useState(false);
   const [isMockData, setIsMockData] = useState(false);
 
-  // Busca as transações reais da API ao carregar o contexto
-  const fetchTransactions = async () => {
+  // 1. Usamos useCallback para poder chamar essa função dentro do useEffect e em outros lugares com segurança
+  const fetchTransactions = useCallback(async () => {
     setIsLoading(true);
     try {
       const response = await api.get('/transactions');
       
-      // Mapeamento: O backend retorna número (1 ou 0), o front precisa de 'income' ou 'expense'
       const formattedTransactions = response.data.map((t: any) => ({
         id: t.id,
         description: t.description,
         amount: t.amount,
         date: t.date,
-        // Traduzindo do banco para a tela:
         type: t.type === 1 ? 'income' : 'expense', 
-        // Se o backend usar relação com Categoria, pegamos o nome:
         category: t.category?.name || 'Geral' 
       }));
 
@@ -40,32 +37,30 @@ export const TransactionProvider: React.FC<{ children: ReactNode }> = ({ childre
       setIsMockData(false);
     } catch (error) {
       console.error('Erro ao buscar transações da API:', error);
-      // Se falhar, você pode optar por deixar a lista vazia ou carregar mockData aqui
     } finally {
       setIsLoading(false);
     }
-  };
+  }, []); // <-- Array de dependências vazio, ela é montada uma vez só
 
-  // Carrega as transações assim que o componente é montado
+  // 2. useEffect agora não vai mais gerar avisos amarelos no terminal
   useEffect(() => {
     fetchTransactions();
-  }, []);
+  }, [fetchTransactions]);
 
   const addTransaction = async (data: Omit<Transaction, 'id'>) => {
     setIsLoading(true);
     try {
-      // Precisamos converter o texto 'income'/'expense' de volta para Número antes de enviar
       const backendPayload = {
         description: data.description,
         amount: data.amount,
         date: data.date,
         type: data.type === 'income' ? 1 : 0,
-        categoryId: data.category // Atenção: o backend espera o ID da categoria, não o nome em texto!
+        // Lembre-se: O backend precisa de um ID real aqui, não a string "Salário" ou "Alimentação".
+        categoryId: data.category 
       };
 
       await api.post('/transactions', backendPayload);
       
-      // Recarrega a lista do banco para garantir que temos o ID real do SQLite
       await fetchTransactions();
     } catch (error) {
       console.error('Erro ao salvar transação:', error);
