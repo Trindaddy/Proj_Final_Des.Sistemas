@@ -3,8 +3,8 @@ const cors = require('cors');
 require('dotenv').config();
 
 const authRoutes = require('./routes/authRoutes');
-const categoryRoutes = require('./routes/categoryRoutes'); // <-- ADICIONADO
-const transactionRoutes = require('./routes/transactionRoutes'); // <-- ADICIONADO
+const categoryRoutes = require('./routes/categoryRoutes'); 
+const transactionRoutes = require('./routes/transactionRoutes'); 
 
 const app = express();
 
@@ -13,8 +13,8 @@ app.use(express.json());
 
 // Rotas
 app.use('/api/auth', authRoutes);
-app.use('/api/category', categoryRoutes); // <-- ADICIONADO
-app.use('/api/transaction', transactionRoutes); // <-- ADICIONADO
+app.use('/api/categories', categoryRoutes);   // <-- Mudado para plural
+app.use('/api/transactions', transactionRoutes); // <-- Mudado para plural
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {

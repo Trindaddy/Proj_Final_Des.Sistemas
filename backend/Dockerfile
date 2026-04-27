@@ -1,18 +1,24 @@
-FROM node:20
+# Usar a imagem oficial do Node.js (versão 18 é bem estável)
+FROM node:18-alpine
 
+# Definir o diretório de trabalho dentro do container
 WORKDIR /app
 
-# Copia os arquivos de dependências
+# Copiar os arquivos de dependência primeiro (isso otimiza o cache do Docker)
 COPY package*.json ./
 COPY prisma ./prisma/
 
-# Instala as dependências e gera o cliente do Prisma
+# Instalar as dependências
 RUN npm install
+
+# Gerar o cliente do Prisma (necessário para o ORM funcionar)
 RUN npx prisma generate
 
-# Copia o restante do código
+# Copiar o restante do código do backend
 COPY . .
 
+# Expor a porta que a API vai rodar
 EXPOSE 5000
 
+# Comando para iniciar a aplicação (ajuste se o seu comando no package.json for diferente)
 CMD ["npm", "run", "dev"]

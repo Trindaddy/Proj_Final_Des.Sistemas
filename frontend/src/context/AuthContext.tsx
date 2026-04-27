@@ -25,7 +25,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const login = async (email: string, password: string): Promise<void> => {
     try {
       // Faz a chamada real para a rota de login do backend
-      const response = await api.post('/login', { email, password });
+      const response = await api.post('/auth/login', { email, password });
       
       // Assumindo que o seu backend retorna { token, user: { id, name, email... } }
       const { token, user: userData } = response.data;
@@ -44,7 +44,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const register = async (name: string, email: string, password: string): Promise<void> => {
     try {
       // Chamada real para criar usuário
-      await api.post('/users', { name, email, password });
+      await api.post('/auth/register', { name, email, password });
       
       // Se criou com sucesso, já fazemos o login automático!
       await login(email, password);
